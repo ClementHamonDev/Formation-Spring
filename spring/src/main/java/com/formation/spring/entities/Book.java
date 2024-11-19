@@ -1,6 +1,12 @@
 package com.formation.spring.entities;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.hibernate.annotations.ManyToAny;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,6 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -36,14 +44,19 @@ public class Book {
     @Column(nullable = true)
     private List<Review> reviews;
 
+    @ManyToMany
+    @JoinTable(name = "book_library", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "library_id"))
+    @JsonIgnoreProperties("books")
+    private Set<Library> libraries = new HashSet<>();
 
     public Book() {
     }
 
-    public Book(String name, String author, Integer price) {
+    public Book(String name, String author, Integer price, BookDetails bookDetails) {
         this.name = name;
         this.author = author;
         this.price = price;
+        this.bookDetails = bookDetails;
     }
 
     public long getId() {
@@ -82,12 +95,20 @@ public class Book {
         this.bookDetails = details;
     }
 
-    public List<Review> getReviews(){
+    public List<Review> getReviews() {
         return this.reviews;
     }
 
-    public void setReviews(List<Review> reviews){
+    public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public Set<Library> getLibraries() {
+        return this.libraries;
+    }
+
+    public void setLibrairies(Set<Library> libraries) {
+        this.libraries = libraries;
     }
 
 }
