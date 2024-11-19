@@ -1,8 +1,12 @@
 package com.formation.spring.entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") 
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
