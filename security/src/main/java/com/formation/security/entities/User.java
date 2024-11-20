@@ -1,28 +1,22 @@
+
 package com.formation.security.entities;
-
-import java.sql.Date;
-import java.util.Collection;
-import java.util.List;
-
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
-@Entity
 @Table(name = "users")
+@Entity
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(nullable = false)
+    private Integer id;
 
     @Column(nullable = false)
     private String fullName;
@@ -34,11 +28,11 @@ public class User implements UserDetails {
     private String password;
 
     @CreationTimestamp
-    @Column(updatable = false, name = "create_ad")
-    private Date createdAd;
+    @Column(updatable = false, name = "created_at")
+    private Date createdAt;
 
     @UpdateTimestamp
-    @Column(name = "update_ad")
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     @Override
@@ -46,20 +40,8 @@ public class User implements UserDetails {
         return List.of();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -67,29 +49,86 @@ public class User implements UserDetails {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
     @Override
-    public String getPassword() {
-        return password;
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setPassword(String password) {
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public User setId(Integer id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public User setFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public User setPassword(String password) {
         this.password = password;
+        return this;
     }
 
-    public Date getCreatedAd() {
-        return createdAd;
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public User setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+        return this;
     }
 
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public User setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }
+
